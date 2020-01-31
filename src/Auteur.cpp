@@ -1,7 +1,7 @@
 #include "Auteur.h"
 #include <iostream>
 
-//! Constructeur de la classe Auteur
+//! Constructeur de la classe Auteur AAAAA
 //! \param nom              Nom de l'auteur
 //! \param anneeDeNaissance Année de naissance de l'auteur
 Auteur::Auteur(const std::string& nom, unsigned int anneeDeNaissance)
