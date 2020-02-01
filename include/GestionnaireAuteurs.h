@@ -3,6 +3,7 @@
 
 #include <string>
 #include "Auteur.h"
+#include <vector>
 
 class GestionnaireAuteurs
 {

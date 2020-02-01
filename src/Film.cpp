@@ -23,6 +23,8 @@ namespace
         return NOMS_GENRES[index];
     }
 
+	//test
+
     //! Fonction qui convertit le enum Pays en string
     //! \param pays     Le pays à convertir
     //! \return         Le string qui représente le enum
