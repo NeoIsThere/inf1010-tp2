@@ -23,7 +23,7 @@ namespace
         return NOMS_GENRES[index];
     }
 
-	//test
+    // test
 
     //! Fonction qui convertit le enum Pays en string
     //! \param pays     Le pays à convertir
@@ -60,9 +60,6 @@ Film::Film(const std::string& nom, unsigned int anneeDeSortie, Genre genre, Pays
     , pays_(pays)
     , estRestreintParAge_(estRestreintParAge)
     , auteur_(auteur)
-    , paysRestreints_(std::make_unique<Pays[]>(CAPACITE_PAYS_INITIALE))
-    , nbPaysRestreints_(0)
-    , capacitePaysRestreints_(CAPACITE_PAYS_INITIALE)
 {
 }
 
@@ -75,32 +72,13 @@ Film::~Film()
 //! \param pays Pays à ajouter à la liste
 void Film::ajouterPaysRestreint(Pays pays)
 {
-    static constexpr unsigned int AUGMENTATION_CAPACITE_PAYS = 2;
-
-    // Verifier si assez de mémoire est allouée
-    if (nbPaysRestreints_ >= capacitePaysRestreints_)
-    {
-        // Creer nouveau tableau
-        std::unique_ptr<Pays[]> newArray =
-            std::make_unique<Pays[]>(capacitePaysRestreints_ * AUGMENTATION_CAPACITE_PAYS);
-
-        // Copier chaque élément vers le nouveau tableau
-        for (std::size_t i = 0; i < nbPaysRestreints_; i++)
-        {
-            newArray[i] = paysRestreints_[i];
-        }
-
-        paysRestreints_ = std::move(newArray); // Pointer vers la nouvelle adresse mémoire
-        capacitePaysRestreints_ *= AUGMENTATION_CAPACITE_PAYS; // Mettre à jour la capacité
-    }
-
-    paysRestreints_[nbPaysRestreints_++] = pays;
+    paysRestreints_.push_back(pays);
 }
 
 //! Méthode qui supprime les pays restreints
 void Film::supprimerPaysRestreints()
 {
-    nbPaysRestreints_ = 0;
+    paysRestreints_.clear();
 }
 
 //! Méthode qui retourne si un pays est dans la liste des pays restreints du film
@@ -108,7 +86,7 @@ void Film::supprimerPaysRestreints()
 //! \return     Un bool représentant si le pays se trouve dans la liste des pays restreints
 bool Film::estRestreintDansPays(Pays pays) const
 {
-    for (std::size_t i = 0; i < nbPaysRestreints_; i++)
+    for (int i=0; i<paysRestreints_.size();i++)
     {
         if (paysRestreints_[i] == pays)
         {
@@ -118,22 +96,7 @@ bool Film::estRestreintDansPays(Pays pays) const
     return false;
 }
 
-//! Méthode qui affiche le film
-//! \param stream Le stream dans lequel afficher
-void Film::afficher(std::ostream& stream) const
-{
-    // Ne modifiez pas cette fonction
-    stream << nom_ << "\n\tDate de sortie: " << anneeDeSortie_
-           << "\n\tGenre: " << getGenreString(genre_) << "\n\tAuteur: " << auteur_->getNom()
-           << "\n\tPays: " << getPaysString(pays_)
-           << (nbPaysRestreints_ == 0 ? "\n\tAucun pays restreint." : "\n\tPays restreints:");
 
-    for (std::size_t i = 0; i < nbPaysRestreints_; i++)
-    {
-        stream << "\n\t\t" << getPaysString(paysRestreints_[i]);
-    }
-    stream << '\n';
-}
 
 // Méthode qui retourne le genre du film
 // \return Le genre du film
@@ -161,4 +124,30 @@ const std::string& Film::getNom() const
 Auteur* Film::getAuteur()
 {
     return auteur_;
+}
+
+ostream& operator<<(ostream& stream, const Film& film)
+{
+	stream << film.nom_ << "\n\tDate de sortie: " << film.anneeDeSortie_
+           << "\n\tGenre: " << getGenreString(film.genre_) << "\n\tAuteur: " << film.auteur_->getNom()
+           << "\n\tPays: " << getPaysString(film.pays_)
+           << (film.paysRestreints_.size() == 0 ? "\n\tAucun pays restreint." : "\n\tPays restreints:");
+
+    for (std::size_t i = 0; i < film.paysRestreints_.size(); i++)
+    {
+        stream << "\n\t\t" << getPaysString(film.paysRestreints_[i]);
+    }
+    stream << '\n';
+
+	return stream;
+}
+
+bool Film::operator==(const string& nomFilm)
+{
+    return (nom_ == nomFilm ? true : false);
+}
+
+bool operator==(const string& nomFilm, Film& film)
+{
+    return (film == nomFilm);
 }

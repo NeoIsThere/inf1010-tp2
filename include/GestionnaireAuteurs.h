@@ -5,15 +5,17 @@
 #include "Auteur.h"
 #include <vector>
 
+using namespace std;
+
 class GestionnaireAuteurs
 {
 public:
     GestionnaireAuteurs();
 
-    bool ajouterAuteur(const Auteur& auteur);
+	friend ostream& operator<<(ostream& o, GestionnaireAuteurs& gestionnaire);
+    bool operator+=(const Auteur& auteur);
     Auteur* chercherAuteur(const std::string& nomAuteur);
     bool chargerDepuisFichier(const std::string& nomFichier);
-    void afficher(std::ostream& stream) const;
 
     std::size_t getNbAuteurs() const;
 
@@ -23,7 +25,6 @@ private:
     bool lireLigneAuteur(const std::string& ligne);
 
     std::vector<Auteur> auteurs_;
-    std::size_t nbAuteurs_;
 };
 
 #endif // GESTIONNAIREAUTEURS_H

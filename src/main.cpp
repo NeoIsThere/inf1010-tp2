@@ -13,6 +13,7 @@
 #include "Librairie.h"
 #include "Utilisateur.h"
 #include "debogageMemoire.h"
+#include "Film.h"
 
 // NOTE: Pour que le programme compile initialement, vous pouvez changer tous
 // les #if true à des #if false, et mettre en commentaire tout le code qui a été
@@ -308,6 +309,8 @@ int main()
                      stringRecu.end());
 
     tests.push_back(stringRecu == filmAttendu);
+
+	cout << filmStream.str();
 
 #else
     tests.push_back(false);
